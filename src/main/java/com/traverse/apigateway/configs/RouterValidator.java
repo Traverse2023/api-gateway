@@ -1,4 +1,4 @@
-package com.traverse.apigateway;
+package com.traverse.apigateway.configs;
 
 import java.util.function.Predicate;
 import org.springframework.http.server.reactive.ServerHttpRequest;

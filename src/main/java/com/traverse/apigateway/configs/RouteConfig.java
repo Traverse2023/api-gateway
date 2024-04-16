@@ -36,11 +36,12 @@ public class RouteConfig {
         return builder.routes()
                 .route("auth-service", r -> r
                         .path("/auth/**")
-                        .filters(f -> f.rewritePath("/user/(?<segment>.*)", "/${segment}"))
+                        .filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/auth/${segment}"))
                         .uri("http://127.0.0.1:8050"))
-                .route("auth-service", r -> r
+
+                .route("auth-service-user", r -> r
                         .path("/user/**")
-                        .filters(f -> f.filter(authFilter).rewritePath("/user/(?<segment>.*)", "/${segment}"))
+                        .filters(f -> f.filter(authFilter).rewritePath("/user/(?<segment>.*)", "/user/${segment}"))
                         .uri("http://127.0.0.1:8050"))
 
                 .route("main-service", r -> r
@@ -54,7 +55,8 @@ public class RouteConfig {
                         .uri("http://127.0.0.1:8080"))
 
                 .route("traverse-ui", r -> r
-                        .path("/traverse-ui/**")
+                        .path("/**")
+                        .filters(f -> f.rewritePath("/(?<segment>.*)", "/${segment}"))
                         .uri("http://127.0.0.1:3000"))
 
                 .build();

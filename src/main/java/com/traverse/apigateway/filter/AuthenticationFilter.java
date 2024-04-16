@@ -1,6 +1,6 @@
 package com.traverse.apigateway.filter;
 
-import com.traverse.apigateway.RouterValidator;
+import com.traverse.apigateway.configs.RouterValidator;
 import com.traverse.apigateway.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
