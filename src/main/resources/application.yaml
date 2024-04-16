@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+auth-service:
+  uri: ${AUTH_SERVICE_URI:http://127.0.0.1:8050}
+
+main-service:
+  uri: ${MAIN_SERVICE_URI:http://127.0.0.1:8000}
+
+storage-service:
+  uri: ${STORAGE_SERVICE_URI:http://127.0.0.1:8080}
+
+traverse-ui:
+  uri: ${TRAVERSE_UI_URI:http://127.0.0.1:3000}
+
+jwt:
+  key: ${JWT_SECRET_KEY:KS8LgP4/sYt6REp8xY7HYaLbHOkyJ1PPB4PFCKjZeI8=}
+spring:
+  application:
+    name: api-gateway
+
+
+
