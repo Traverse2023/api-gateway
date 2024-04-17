@@ -56,7 +56,7 @@ public class RouteConfig {
 
                 .route("traverse-ui", r -> r
                         .path("/**")
-                        .filters(f -> f.rewritePath("/(?<segment>.*)", "/${segment}"))
+                        //.filters(f -> f.rewritePath("/(?<segment>.*)", "/"))
                         .uri("http://127.0.0.1:3000"))
 
                 .build();

@@ -34,14 +34,16 @@ public class AuthenticationFilter implements GatewayFilter {
                 log.info("No authorization header in request.");
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-            String token = getToken(request);
-            String userId = jwtUtil.validateToken(token);
-            if (token.isEmpty() || userId.isEmpty()) {
+            try {
+                String token = getToken(request);
+                String userId = jwtUtil.validateToken(token);
+                log.info("Validated and retrieved user node id from token: {}", userId);
+                ServerHttpRequest newRequest =  request.mutate().header("x-user", userId).build();
+                return chain.filter(exchange.mutate().request(newRequest).build());
+            } catch (Exception e) {
+                log.info("Exception caught validating authorization: {}", e.getMessage());
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-            log.info("Validated and retrieved user node id from token: {}", userId);
-            ServerHttpRequest newRequest =  request.mutate().header("x-user", userId).build();
-            return chain.filter(exchange.mutate().request(newRequest).build());
         }
         return chain.filter(exchange);
     }
@@ -51,12 +53,13 @@ public class AuthenticationFilter implements GatewayFilter {
         if (authHeader !=null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
         }
-        return "";
+        throw new RuntimeException("Invalid authorization token: token is missing or malformed");
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
+
         return response.setComplete();
     }
 
