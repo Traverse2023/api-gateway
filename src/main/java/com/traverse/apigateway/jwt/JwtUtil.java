@@ -1,10 +1,8 @@
 package com.traverse.apigateway.jwt;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import javax.crypto.spec.SecretKeySpec;
@@ -20,13 +18,10 @@ public class JwtUtil {
     @Value("${jwt.key}")
     private String key;
 
-    public String validateToken(String token) {
+    public String validateToken(String token) throws SignatureException, ExpiredJwtException {
         JwtParser parser = Jwts.parserBuilder().setSigningKey(getKey()).build();
         parser.parseClaimsJws(token);
-        if (!isExpired(token)) {
-            return getUserId(token);
-        }
-        return null;
+        return getUserId(token);
     }
 
     public Key getKey() {

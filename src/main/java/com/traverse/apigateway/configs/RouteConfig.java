@@ -13,6 +13,11 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import java.util.Collections;
 
+/**
+ * Configuration to set routes, filters, and mutation of request.
+ * Set other configurations related to API Gateway like CORS.
+ * Endpoints are set as env variables and defined in application.yaml
+ * */
 @Configuration
 public class RouteConfig {
 
@@ -31,6 +36,12 @@ public class RouteConfig {
     @Value("${traverse-ui.uri}")
     private String frontEndURI;
 
+    /**
+     * @param builder a {@link RouteLocatorBuilder} instance.
+     * @return A {@link RouteLocator} which defines route configurations.
+     * Expose a bean that defines routing configurations.
+     * Can apply filters to perform validation or mutation on request before forwarding to specified URIs.
+     * */
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -56,12 +67,15 @@ public class RouteConfig {
 
                 .route("traverse-ui", r -> r
                         .path("/**")
-                        .filters(f -> f.rewritePath("/(?<segment>.*)", "/${segment}"))
+                        //.filters(f -> f.rewritePath("/(?<segment>.*)", "/"))
                         .uri("http://127.0.0.1:3000"))
 
                 .build();
     }
 
+    /**
+     * Exposes {@link CorsConfigurationSource} bean that defines custom CORS configuration.
+     * */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration apiCorsConfiguration = new CorsConfiguration();
