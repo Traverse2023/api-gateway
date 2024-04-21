@@ -42,6 +42,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return chain.filter(exchange.mutate().request(newRequest).build());
             } catch (Exception e) {
                 log.warn("Error validating authorization token: {}", e.getMessage());
+
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
         }
