@@ -97,6 +97,75 @@
 					<target>17</target>
 				</configuration>
 			</plugin>
+			<!-- _________________________________Checkstyle________________________________-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<consoleOutput>true</consoleOutput>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<failOnViolation>false</failOnViolation>
+					<failsOnError>false</failsOnError>
+					<configLocation>checkstyle/checkstyle.xml</configLocation>
+					<suppressionsLocation>checkstyle/suppressions.xml</suppressionsLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- _________________________________JACOCO________________________________-->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<configuration>
+					<rules>
+						<rule>
+							<element>BUNDLE</element>
+							<limits>
+								<limit>
+									<counter>LINE</counter>
+									<value>COVEREDRATIO</value>
+									<!--							Code coverage percentage requirement-->
+									<minimum>0.70</minimum>
+								</limit>
+							</limits>
+						</rule>
+					</rules>
+				</configuration>
+				<executions>
+					<!--					<execution>-->
+					<!--						<id>default-prepare-agent</id>-->
+					<!--						<goals>-->
+					<!--							<goal>prepare-agent</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+					<!--					<execution>-->
+					<!--						<id>default-report</id>-->
+					<!--						<goals>-->
+					<!--							<goal>report</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+					<!--					<execution>-->
+					<!--						<id>default-check</id>-->
+					<!--&lt;!&ndash;Fail build during this phase if code test coverage does not meet configuration requirements&ndash;&gt;-->
+					<!--&lt;!&ndash;						<phase>validate</phase>&ndash;&gt;-->
+					<!--						<goals>-->
+					<!--							<goal>check</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+				</executions>
+			</plugin>
+
+
 		</plugins>
 	</build>
 

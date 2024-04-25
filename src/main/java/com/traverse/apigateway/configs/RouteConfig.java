@@ -14,8 +14,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import java.util.Collections;
 
 /**
- * Configuration to set routes, filters, and mutation of request.
- * Set other configurations related to API Gateway like CORS.
+ * Configuration to set routes, filters, and mutations etc...
+ * Set other configurations related to API Gateway such as CORS.
  * Endpoints are set as env variables and defined in application.yaml
  * */
 @Configuration
@@ -37,10 +37,12 @@ public class RouteConfig {
     private String frontEndURI;
 
     /**
-     * @param builder a {@link RouteLocatorBuilder} instance.
-     * @return A {@link RouteLocator} which defines route configurations.
      * Expose a bean that defines routing configurations.
      * Can apply filters to perform validation or mutation on request before forwarding to specified URIs.
+     * An {@link AuthenticationFilter} is set for endpoints that require the user be authenticated prior.
+     *
+     * @param builder a bean of {@link RouteLocatorBuilder}.
+     * @return A {@link RouteLocator} which defines route configurations.
      * */
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
@@ -69,12 +71,13 @@ public class RouteConfig {
                         .path("/**")
                         //.filters(f -> f.rewritePath("/(?<segment>.*)", "/"))
                         .uri("http://127.0.0.1:3000"))
-
                 .build();
     }
 
     /**
-     * Exposes {@link CorsConfigurationSource} bean that defines custom CORS configuration.
+     * Exposes {@link CorsConfigurationSource} bean.
+     *
+     * @return a custom cors configuration for the gateway service.
      * */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -83,7 +86,6 @@ public class RouteConfig {
         apiCorsConfiguration.setAllowedOriginPatterns(Collections.singletonList("*"));
         apiCorsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
         apiCorsConfiguration.setAllowedMethods(Collections.singletonList("*"));
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", apiCorsConfiguration);
         return source;
