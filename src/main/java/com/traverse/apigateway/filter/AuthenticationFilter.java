@@ -3,6 +3,8 @@ package com.traverse.apigateway.filter;
 import com.traverse.apigateway.configs.RouterValidator;
 import com.traverse.apigateway.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -12,7 +14,11 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
+
+import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Objects;
 
 
@@ -45,24 +51,41 @@ public class AuthenticationFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         if (routerValidator.isSecured.test(request)) {
-            if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                log.info("Error: No authorization header in request.");
+            String path = exchange.getRequest().getPath().toString();
+            String token;
+
+            token = request.getQueryParams().getOrDefault("access_token", Collections.singletonList("")).get(0);
+
+
+            if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) && token.isEmpty()) {
+                log.info("Error: No authorization found in request. Local address: {}, remote: {}", request.getLocalAddress(), request.getRemoteAddress());
                 return onError(exchange.getResponse(), HttpStatus.UNAUTHORIZED);
             }
             try {
-                String token = getToken(request);
+                if (token == null || token.isEmpty()) { token = getToken(request);}
+                log.info("Performing token validation with token: {}", token);
                 String userId = jwtUtil.validateToken(token);
-                log.info("Validated and retrieved user node id from token: {}", userId);
                 ServerHttpRequest newRequest =  request.mutate().header("x-user", userId).build();
                 return chain.filter(exchange.mutate().request(newRequest).build());
             } catch (Exception e) {
-                log.warn("Error validating authorization token: {}", e.getMessage());
+                log.warn("Error validating authorization token: {} at path: {}", e.getMessage(), path);
 
                 return onError(exchange.getResponse(), HttpStatus.UNAUTHORIZED);
             }
         }
         return chain.filter(exchange);
     }
+
+    /**
+     *
+     * */
+    private String getQueryTokenIfExists(String path) throws URISyntaxException {
+        String token = new URIBuilder(path).getQueryParams().stream()
+                .filter(param -> param.getName().equals("access_token")).map(NameValuePair::getValue).findFirst().orElse("");
+        return token;
+    }
+
+
 
     /**
      * Helper method extracts a token from a {@link ServerHttpRequest}'s headers. Verifies the headers existence

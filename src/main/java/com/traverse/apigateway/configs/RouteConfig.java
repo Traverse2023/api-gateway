@@ -9,8 +9,10 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
 import java.util.Collections;
 
 /**
@@ -47,49 +49,55 @@ public class RouteConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
+                .route("agora", r -> r
+                        .path("/agora/**")
+                        .filters(f -> f.filter(authFilter).rewritePath("/agora/(?<segment>.*)", "/${segment}")
+                                .setResponseHeader("Access-Control-Allow-Origin", "*")
+                        )
+                        .uri("http://127.0.0.1:8000"))
+
                 .route("auth-service", r -> r
                         .path("/auth/**")
-                        .filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/auth/${segment}"))
+                        .filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/auth/${segment}")
+                                .setResponseHeader("Access-Control-Allow-Origin", "*")
+                                )
                         .uri("http://127.0.0.1:8050"))
 
                 .route("auth-service-user", r -> r
                         .path("/user/**")
-                        .filters(f -> f.filter(authFilter).rewritePath("/user/(?<segment>.*)", "/user/${segment}"))
+                        .filters(f -> f.filter(authFilter).rewritePath("/user/(?<segment>.*)", "/user/${segment}")
+                                .setResponseHeader("Access-Control-Allow-Origin", "*"))
                         .uri("http://127.0.0.1:8050"))
 
                 .route("main-service", r -> r
                         .path("/main-service/**")
-                        .filters(f -> f.filter(authFilter).rewritePath("/main-service/(?<segment>.*)", "/${segment}"))
+                        .filters(f -> f.filter(authFilter).rewritePath("/main-service/(?<segment>.*)", "/api/${segment}")
+                                .setResponseHeader("Access-Control-Allow-Origin", "*")
+                                .removeRequestHeader("Access-Control-Allow-Origin"))
                         .uri("http://127.0.0.1:8000"))
 
                 .route("storage-service", r -> r
                         .path("/storage-service/**")
-                        .filters(f -> f.filter(authFilter).rewritePath("/storage-service/(?<segment>.*)", "/${segment}"))
+                        .filters(f -> f.filter(authFilter).rewritePath("/storage-service/(?<segment>.*)", "/api/v1/${segment}")
+                                .setResponseHeader("Access-Control-Allow-Origin", "*"))
                         .uri("http://127.0.0.1:8080"))
+
+                .route("sockets", r -> r
+                        .path("/socket.io/**")
+                        .filters(f -> f.filter(authFilter).rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
+                        .uri("http://127.0.0.1:8000"))
+
+//                .route("ws", r -> r
+//                        .path("/socket.io/**")
+//                        .filters(f -> f.rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
+//                        .uri("http://127.0.0.1:8000"))
 
                 .route("traverse-ui", r -> r
                         .path("/**")
-                        //.filters(f -> f.rewritePath("/(?<segment>.*)", "/"))
-                        .uri("http://127.0.0.1:3000"))
+                        //.filters(f ->  f.rewritePath("/(?<segment>.*)", "/"))
+                        .uri("http://127.0.0.1:3000")
+                )
                 .build();
     }
-
-    /**
-     * Exposes {@link CorsConfigurationSource} bean.
-     *
-     * @return a custom cors configuration for the gateway service.
-     * */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration apiCorsConfiguration = new CorsConfiguration();
-        apiCorsConfiguration.setAllowCredentials(true);
-        apiCorsConfiguration.setAllowedOriginPatterns(Collections.singletonList("*"));
-        apiCorsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
-        apiCorsConfiguration.setAllowedMethods(Collections.singletonList("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", apiCorsConfiguration);
-        return source;
-    }
-
 
 }
