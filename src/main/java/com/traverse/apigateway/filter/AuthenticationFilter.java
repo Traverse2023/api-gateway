@@ -51,6 +51,7 @@ public class AuthenticationFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         if (routerValidator.isSecured.test(request)) {
+            log.info("Security enabled: performing authentication on path {}", request.getPath());
             String path = exchange.getRequest().getPath().toString();
             String token;
 

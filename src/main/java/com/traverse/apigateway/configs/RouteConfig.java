@@ -87,11 +87,6 @@ public class RouteConfig {
                         .filters(f -> f.filter(authFilter).rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
                         .uri("http://127.0.0.1:8000"))
 
-//                .route("ws", r -> r
-//                        .path("/socket.io/**")
-//                        .filters(f -> f.rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
-//                        .uri("http://127.0.0.1:8000"))
-
                 .route("traverse-ui", r -> r
                         .path("/**")
                         //.filters(f ->  f.rewritePath("/(?<segment>.*)", "/"))
