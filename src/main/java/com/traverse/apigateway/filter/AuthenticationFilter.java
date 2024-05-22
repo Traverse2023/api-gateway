@@ -77,16 +77,6 @@ public class AuthenticationFilter implements GatewayFilter {
         return chain.filter(exchange);
     }
 
-    /**
-     *
-     * */
-    private String getQueryTokenIfExists(String path) throws URISyntaxException {
-        String token = new URIBuilder(path).getQueryParams().stream()
-                .filter(param -> param.getName().equals("access_token")).map(NameValuePair::getValue).findFirst().orElse("");
-        return token;
-    }
-
-
 
     /**
      * Helper method extracts a token from a {@link ServerHttpRequest}'s headers. Verifies the headers existence
