@@ -8,12 +8,6 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import java.util.Collections;
 
 /**
  * Configuration to set routes, filters, and mutations etc...
