@@ -18,8 +18,9 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - target/api-gateway-0.0.1.jar
-    #- deployment-scripts/change_permissions.sh
+    - target/*.jar
     - deployment-scripts/install_dependencies.sh
     - deployment-scripts/start_server.sh
     - deployment-scripts/stop_server.sh
+    - appspec.yml
+
