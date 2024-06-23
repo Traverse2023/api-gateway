@@ -6,7 +6,7 @@ files:
     destination: /home/ec2-user/server
 hooks:
   BeforeInstall:
-    - location: tmp/install_dependencies.sh
+    - location: install_dependencies.sh
       timeout: 300
       runas: root
 #  AfterInstall:
@@ -14,11 +14,11 @@ hooks:
 #      timeout: 300
 #      runas: root
   ApplicationStart:
-    - location: tmp/start_server.sh
+    - location: start_server.sh
 #    - location: tmp/create_test_db.sh
       timeout: 300
       runas: root
   ApplicationStop:
-    - location: tmp/stop_server.sh
+    - location: stop_server.sh
       timeout: 300
       runas: root

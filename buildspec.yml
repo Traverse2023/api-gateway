@@ -19,8 +19,7 @@ phases:
 artifacts:
   files:
     - target/*.jar
-    - deployment-scripts/install_dependencies.sh
-    - deployment-scripts/start_server.sh
-    - deployment-scripts/stop_server.sh
+    - deployment-scripts/*.sh
     - appspec.yml
+  discard-paths: yes
 
