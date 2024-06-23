@@ -3,7 +3,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /tmp
+    destination: /home/ec2-user/server
 hooks:
   BeforeInstall:
     - location: tmp/install_dependencies.sh
