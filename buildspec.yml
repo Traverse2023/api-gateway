@@ -19,3 +19,7 @@ phases:
 artifacts:
   files:
     - target/api-gateway-0.0.1.jar
+    #- deployment-scripts/change_permissions.sh
+    - deployment-scripts/install_dependencies.sh
+    - deployment-scripts/start_server.sh
+    - deployment-scripts/stop_server.sh
