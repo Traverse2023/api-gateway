@@ -48,38 +48,38 @@ public class RouteConfig {
                         .filters(f -> f.filter(authFilter).rewritePath("/agora/(?<segment>.*)", "/${segment}")
                                 .setResponseHeader("Access-Control-Allow-Origin", "*")
                         )
-                        .uri("http://127.0.0.1:8000"))
+                        .uri(mainServiceURI))
 
                 .route("auth-service", r -> r
                         .path("/auth/**")
                         .filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/auth/${segment}")
                                 .setResponseHeader("Access-Control-Allow-Origin", "*")
                                 )
-                        .uri("http://127.0.0.1:8050"))
+                        .uri(authServiceURI))
 
                 .route("auth-service-user", r -> r
                         .path("/user/**")
                         .filters(f -> f.filter(authFilter).rewritePath("/user/(?<segment>.*)", "/user/${segment}")
                                 .setResponseHeader("Access-Control-Allow-Origin", "*"))
-                        .uri("http://127.0.0.1:8050"))
+                        .uri(authServiceURI))
 
                 .route("main-service", r -> r
                         .path("/main-service/**")
                         .filters(f -> f.filter(authFilter).rewritePath("/main-service/(?<segment>.*)", "/api/${segment}")
                                 .setResponseHeader("Access-Control-Allow-Origin", "*")
                                 .removeRequestHeader("Access-Control-Allow-Origin"))
-                        .uri("http://127.0.0.1:8000"))
+                        .uri(mainServiceURI))
 
                 .route("storage-service", r -> r
                         .path("/storage-service/**")
                         .filters(f -> f.filter(authFilter).rewritePath("/storage-service/(?<segment>.*)", "/api/v1/${segment}")
                                 .setResponseHeader("Access-Control-Allow-Origin", "*"))
-                        .uri("http://127.0.0.1:8080"))
+                        .uri(storageServiceURI))
 
                 .route("sockets", r -> r
                         .path("/socket.io/**")
                         .filters(f -> f.filter(authFilter).rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
-                        .uri("http://127.0.0.1:8000"))
+                        .uri(mainServiceURI))
 
                 .route("health-check", r -> r
                         .path("/actuator/health")
@@ -89,7 +89,7 @@ public class RouteConfig {
                 .route("traverse-ui", r -> r
                         .path("/**")
                         //.filters(f ->  f.rewritePath("/(?<segment>.*)", "/"))
-                        .uri("http://127.0.0.1:3000")
+                        .uri(frontEndURI)
                 )
                 .build();
     }
