@@ -1,6 +1,5 @@
 server:
   port: 8081
-
 auth-service:
   uri: ${AUTH_SERVICE_URI:http://127.0.0.1:8050}
 
@@ -19,5 +18,13 @@ spring:
   application:
     name: api-gateway
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    gateway:
+      enabled: true
 
 

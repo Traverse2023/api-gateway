@@ -81,6 +81,11 @@ public class RouteConfig {
                         .filters(f -> f.filter(authFilter).rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
                         .uri("http://127.0.0.1:8000"))
 
+                .route("health-check", r -> r
+                        .path("/actuator/health")
+                        .filters(f ->  f.setStatus(200))
+                        .uri("no://op"))
+
                 .route("traverse-ui", r -> r
                         .path("/**")
                         //.filters(f ->  f.rewritePath("/(?<segment>.*)", "/"))
