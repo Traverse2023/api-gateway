@@ -82,7 +82,7 @@ public class RouteConfig {
                         .uri(mainServiceURI))
 
                 .route("health-check", r -> r
-                        .path("/actuator/health")
+                        .path("/actuator/**")
                         .filters(f ->  f.setStatus(200))
                         .uri("no://op"))
 
