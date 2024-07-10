@@ -66,8 +66,7 @@ public class RouteConfig {
                 .route("main-service", r -> r
                         .path("/main-service/**")
                         .filters(f -> f.filter(authFilter).rewritePath("/main-service/(?<segment>.*)", "/api/${segment}")
-                                .setResponseHeader("Access-Control-Allow-Origin", "*")
-                                .removeRequestHeader("Access-Control-Allow-Origin"))
+                                .setResponseHeader("Access-Control-Allow-Origin", "*"))
                         .uri(mainServiceURI))
 
                 .route("storage-service", r -> r
@@ -78,7 +77,8 @@ public class RouteConfig {
 
                 .route("sockets", r -> r
                         .path("/socket.io/**")
-                        .filters(f -> f.filter(authFilter).rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}"))
+                        .filters(f -> f.filter(authFilter).rewritePath("/socket.io/(?<segment>.*)", "/socket.io/${segment}")
+                                .setResponseHeader("Access-Control-Allow-Origin", "*"))
                         .uri(mainServiceURI))
 
                 .route("health-check", r -> r
