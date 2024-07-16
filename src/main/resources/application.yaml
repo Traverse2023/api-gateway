@@ -1,5 +1,12 @@
 server:
   port: ${API_GATEWAY_PORT:8081}
+  ssl:
+    enabled: true
+    key-alias: scg
+    key-store-password: scg1234
+    key-store: classpath:scg-keystore.p12
+    key-store-type: PKCS12
+
 auth-service:
   uri: ${AUTH_SERVICE_URI:http://127.0.0.1:8050}
 
@@ -26,5 +33,4 @@ management:
   endpoint:
     gateway:
       enabled: true
-
 
