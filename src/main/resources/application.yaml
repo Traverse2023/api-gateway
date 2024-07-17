@@ -1,8 +1,5 @@
 server:
   port: ${API_GATEWAY_PORT:8081}
-  ssl:
-    enabled: true
-
 
 auth-service:
   uri: ${AUTH_SERVICE_URI:http://127.0.0.1:8050}
