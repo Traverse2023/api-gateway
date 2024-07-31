@@ -88,7 +88,7 @@ public class RouteConfig {
 
                 .route("traverse-ui", r -> r
                         .path("/**")
-                        .filters(f ->  f.rewritePath("/(?<segment>.*)", "/index.js"))
+                        .filters(f ->  f.rewritePath("/(?<segment>.*)", "/index.html"))
                         .uri(frontEndURI))
 
                 .build();
