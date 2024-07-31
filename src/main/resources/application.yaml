@@ -1,5 +1,5 @@
 server:
-  port: ${API_GATEWAY_PORT}
+  port: 8081
 
 auth-service:
   uri: ${AUTH_SERVICE_URI}
