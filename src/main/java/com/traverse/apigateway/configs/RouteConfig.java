@@ -86,11 +86,6 @@ public class RouteConfig {
                         .filters(f ->  f.setStatus(200))
                         .uri("no://op"))
 
-//                .route("traverse-ui", r -> r
-//                        .path("/profile/**")
-//                        .filters(f ->  f.rewritePath("/profile/(?<segment>.*)", "/"))
-//                        .uri(frontEndURI))
-
                 .route("traverse-ui", r -> r
                         .path("/**")
                         //.filters(f ->  f.rewritePath("/(?<segment>.*)", "/"))
