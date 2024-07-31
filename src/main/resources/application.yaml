@@ -1,17 +1,17 @@
 server:
-  port: ${API_GATEWAY_PORT:8081}
+  port: ${API_GATEWAY_PORT}
 
 auth-service:
-  uri: ${AUTH_SERVICE_URI:http://127.0.0.1:8050}
+  uri: ${AUTH_SERVICE_URI}
 
 main-service:
-  uri: ${MAIN_SERVICE_URI:http://127.0.0.1:8000}
+  uri: ${MAIN_SERVICE_URI}
 
 storage-service:
-  uri: ${STORAGE_SERVICE_URI:http://127.0.0.1:8080}
+  uri: ${STORAGE_SERVICE_URI}
 
 traverse-ui:
-  uri: ${TRAVERSE_UI_URI:http://127.0.0.1:3000}
+  uri: ${TRAVERSE_UI_URI}
 
 jwt:
   key: ${JWT_SECRET_KEY:KS8LgP4/sYt6REp8xY7HYaLbHOkyJ1PPB4PFCKjZeI8=}
